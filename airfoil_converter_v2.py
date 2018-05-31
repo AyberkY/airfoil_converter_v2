@@ -78,8 +78,8 @@ class Airfoil(object):
                 yVals.append(point.getY())
         else:
             for point in self.points:
-                # xVals.append(point.getX())
-                # yVals.append(point.getY())
+                xVals.append(point.getX())
+                yVals.append(point.getY())
                 pass
             
         plt.figure('plot1')
