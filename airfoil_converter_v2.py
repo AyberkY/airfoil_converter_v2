@@ -33,9 +33,13 @@ class Point(object):
         return sqrt((self.x - other.x)**2 + (self.y - other.y)**2 + (self.z - other.z)**2)
 
 class Airfoil(object):
-    def __init__(self, name):
-        self.name = name
+    def __init__(self, filename):
+        self.filename = filename
+        self.airfoilName = ''
         self.points = []
+
+    def set_airfoilName(self, airfoilName):
+        self.airfoilName = airfoilName
         
     def addPoint(self, x, y, z):
         point = Point(x, y, z)
@@ -50,12 +54,15 @@ class Airfoil(object):
             yVals.append(point.getY())
             
         plt.figure('plot1')
-        plt.plot(xVals, yVals, label = self.name, linewidth = 0.5)
+        plt.plot(xVals, yVals, label = self.airfoilName, linewidth = 0.5)
         plt.legend(loc = 'upper left')
-        # plt.ylim(-0.5, 0.5)
+        plt.ylim(-0.5, 0.5)
         plt.show()
+
+    def __str__(self):
+        return self.airfoilName
     
-def importAirfoil(filename):
+def ConvertAirfoil(filename):
     '''
     input: selig format airfoil file to be converted into an Airfoil instance.
     returns an instance of the Airfoil class, with all coordinates from the input.
@@ -63,4 +70,17 @@ def importAirfoil(filename):
     try:
         origin = open(filename, 'r')
     except IOError:
-        print('Couldn''t open file or files, please try again.')
+        print("Couldn't open file or files.")
+    else:
+        airfoil = Airfoil(filename)
+
+        pointArray = origin.read().split('\n')
+
+        airfoil.set_airfoilName(pointArray[0])
+
+        for point in pointArray[1:]:
+            coordinates = point.split()
+            if len(coordinates):
+                airfoil.addPoint(float(coordinates[0]), float(coordinates[1]), 0.0)
+
+        return airfoil
