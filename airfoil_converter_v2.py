@@ -80,7 +80,6 @@ class Airfoil(object):
             for point in self.points:
                 xVals.append(point.getX())
                 yVals.append(point.getY())
-                pass
             
         plt.figure('plot1')
         plt.plot(xVals, yVals, label = self.airfoilName + ' twist:' + str(self.twist), linewidth = 0.5)
