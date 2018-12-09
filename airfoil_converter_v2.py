@@ -5,7 +5,7 @@ Created on Thu Jan 11 01:03:27 2018
 @author: Ayberk Yaraneri
 """
 
-import pylab as plt
+import matplotlib.pyplot as plt
 import math
 
 class Point(object):
@@ -13,22 +13,22 @@ class Point(object):
         self.x = x
         self.y = y
         self.z = z
-    
+
     def __str__(self):
         return '(' + str(self.x) + ', ' + str(self.y) + ', ' + str(self.z) + ')'
-    
+
     def getX(self):
         return self.x
-    
+
     def getY(self):
         return self.y
-    
+
     def getZ(self):
         return self.z
-    
+
     def getCoord(self):
         return (self.x, self.y, self.z)
-    
+
     def distance(self, other):
         return math.sqrt((self.x - other.x)**2 + (self.y - other.y)**2 + (self.z - other.z)**2)
 
@@ -42,7 +42,7 @@ class Airfoil(object):
 
     def set_airfoilName(self, airfoilName):
         self.airfoilName = airfoilName
-        
+
     def addPoint(self, x, y, z):
         point = Point(x, y, z)
         self.points.append(point)
@@ -62,16 +62,16 @@ class Airfoil(object):
 
             alpha = math.degrees(math.atan2(y, (x-0.5)))
             hypotenuse_length = point.distance(midChord)
-            
+
             newY = math.sin(math.radians(alpha+theta)) * hypotenuse_length
             newX = math.cos(math.radians(alpha+theta)) * hypotenuse_length
 
             self.twisted_points.append(Point(newX, newY, 0.0))
-    
+
     def plotAirfoil(self):
         xVals = []
         yVals = []
-        
+
         if self.twist != 0:
             for point in self.twisted_points:
                 xVals.append(point.getX())
@@ -80,7 +80,7 @@ class Airfoil(object):
             for point in self.points:
                 xVals.append(point.getX())
                 yVals.append(point.getY())
-            
+
         plt.figure('plot1')
         plt.plot(xVals, yVals, label = self.airfoilName + ' twist:' + str(self.twist), linewidth = 0.5)
         plt.legend(loc = 'upper left')
@@ -89,7 +89,7 @@ class Airfoil(object):
 
     def __str__(self):
         return self.airfoilName + ' twist:' + str(self.twist)
-    
+
 def ConvertAirfoil(filename):
     '''
     input: selig format airfoil file to be converted into an Airfoil instance.
@@ -115,7 +115,7 @@ def ConvertAirfoil(filename):
 
 airfoil1 = ConvertAirfoil('clarky.dat')
 
-airfoil1.twistAirfoil(20)
+airfoil1.twistAirfoil(-10)
 # airfoil1.twistAirfoil(0)
 # airfoil1.twistAirfoil(20)
 # airfoil1.twistAirfoil(20)
