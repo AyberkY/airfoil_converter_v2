@@ -69,6 +69,8 @@ class Airfoil(object):
                 if len(coordinates):
                     self.points.append(Point(float(coordinates[0]), float(coordinates[1]), 0.0))
 
+        print('Airfoil imported successfully.')
+
     def set_airfoil_name(self, airfoil_name):
         self.airfoil_name = airfoil_name
 
@@ -183,16 +185,103 @@ class Airfoil(object):
         plt.axhline(self.midPoint.getY(), color = 'r', linewidth = 0.2)
         plt.show()
 
+    def exportAirfoil(self, newFileName):
+        try:
+            output = open(newFileName, 'w')
+        except IOError:
+            print("Couldn't open file or files.")
+        else:
+            for point in self.points:
+                output.write(str.format('{0:.6f}', float(point.getX())) + '\t')
+                output.write(str.format('{0:.6f}', float(point.getX())) + '\t')
+                output.write('0.000000\n')
+
+        print("Airofil exported successfully as: " + newFileName)
+
     def __str__(self):
         return self.airfoil_name + ' twist:' + str(self.twist)
 
+
+
+
+###################################################################################################################################
+#                                                        INTERFACING                                                              #
+###################################################################################################################################
+print("~Welcome to Airfoil_Converter_V2.0!~")
+
+imported = False
+
+while True:
+
+    command = input(">")
+
+    if command == 'help' or command == 'h':
+        print('\n')
+        print("Available Commands:")
+        print("import, move, scale, twist, plot, export, exit")
+        print('\n')
+
+    elif command == 'import':
+        if imported:
+            print('Airfoil already imported!')
+        else:
+            filename = input('enter filename:')
+            imported = True
+            airfoil1 = Airfoil(filename)
+
+    elif command == 'move':
+        if not imported:
+            print('No airfoil avilable!')
+
+        else:
+            x = float(input("x:"))
+            y = float(input("y:"))
+            airfoil1.moveAirfoil(x, y)
+
+    elif command == 'scale':
+        if not imported:
+            print('No airfoil available!')
+
+        else:
+            factor = float(input("factor:"))
+            airfoil1.scaleAirfoil(factor)
+
+    elif command == 'twist':
+        if not imported:
+            print("No airfoil available!")
+
+        else:
+            degrees = float(input('degrees:'))
+            airfoil1.changeTwist(degrees)
+
+    elif command == 'plot':
+        if not imported:
+            print('No airfoil available!')
+
+        else:
+            airfoil1.plotAirfoil()
+
+    elif command == 'export':
+        if not imported:
+            print('No airfoil avaliable!')
+
+        else:
+            newFileName = input("File name to export as: ")
+            airfoil1.exportAirfoil(newFileName)
+
+    elif command == 'exit':
+        break
+
+    else:
+        print("Invalid Command")
+
+
+
+
+"""
 airfoil1 = Airfoil('clarky.dat')
 
 airfoil1.moveAirfoil(-0.5, 0.5)
-# airfoil1.scaleAirfoil(3.0)
-
-# airfoil1.changeTwist(-10)
-# airfoil1.changeTwist(0)
 
 
 airfoil1.moveAirfoil(0, -0.5)
@@ -210,3 +299,4 @@ airfoil1.addSlot(0.15, 0.03, 0.02)
 
 
 airfoil1.plotAirfoil()
+"""
